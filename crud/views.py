@@ -37,7 +37,7 @@ class ProductDeleteGet(APIView):
 
     def get(self, req, id):
         queryset = ProductoModel.objects.get(id=id)
-        serializer = ProductoSerializer(queryset)
+        serializer = ProductoSerializer(queryset,context={'request': req})
         return Response(serializer.data)
 
     def put(self, req, id):
@@ -45,7 +45,7 @@ class ProductDeleteGet(APIView):
         if (queryset == None):
             return Response(status=status.HTTP_200_OK, data={'error': 'Not found data'})
         serializer = ProductoSerializer(
-            queryset, data=req.data,  context={'request': req})
+            queryset, context={'request': req}, data=req.data)
         if serializer.is_valid():
             serializer.save()
             return Response(status=status.HTTP_200_OK, data=serializer.data)
